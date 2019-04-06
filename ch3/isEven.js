@@ -3,10 +3,14 @@ function isEven(n) {
     return true;
   } else if (n === 1) {
     return false;
-  } else {
+  } else if (n > 0) {
     return isEven(n - 2);
+  } else {
+	  return isEven(n + 2);
   }
 }
 
 print(isEven(5));
+print(isEven(-5));
 print(isEven(4));
+print(isEven(-4));
