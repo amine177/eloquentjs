@@ -23,3 +23,11 @@ console.log(reduce(ancestry
     else
       return e2;},
   ""));
+
+console.log("the most ancient ancestor is");
+console.log(ancestry.reduce(function(min, cur) {
+  if (min.born > cur.born)
+    return cur;
+  else
+    return min;
+}));
