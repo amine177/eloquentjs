@@ -41,6 +41,13 @@ function arrayToList_better(arr) {
     return list;
 }
 
-console.log(arrayToList([1, 2, 3]));
+function nth(list, n) {
+  if (n === 1)
+    return list.value;
+  else
+    return nth(list.rest, n - 1);
+}
+
+console.log(nth(arrayToList([1, 2, 3]), 2));
 console.log(arrayToList_better([1, 2, 3]));
 printList(arrayToList([1, 2, 3]));
