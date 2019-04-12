@@ -33,5 +33,14 @@ function arrayToList(arr) {
   }
   return list;
 }
+
+function arrayToList_better(arr) {
+  var list = null;
+  for (var i = arr.length - 1; i > -1; i--)
+    list = {value: arr[i], rest: list};
+    return list;
+}
+
 console.log(arrayToList([1, 2, 3]));
+console.log(arrayToList_better([1, 2, 3]));
 printList(arrayToList([1, 2, 3]));
