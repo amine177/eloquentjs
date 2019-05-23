@@ -11,11 +11,16 @@ class Vector {
   minus(v) {
     return new Vector(-v.x + this.x , -v.y + this.y);
   }
+
+  length() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
 }
 
 
 
 let v1 = new Vector(1, 1);
 let v2 = new Vector(1, 1);
+console.log(v1.length())
 console.log(v1.plus(v2));
-console.log(v1.minus(v2));
+console.log(v1.minus(v2).length());
