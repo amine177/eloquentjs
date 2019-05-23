@@ -19,6 +19,21 @@ class Group {
   }
 }
 
+class GroupIterator {
+  constructor(group) {
+    this.group = group;
+    this.index = 0;
+  }
+
+  next() {
+    if (this.index >= this.group._group.length)
+      return {done: true}
+    else
+      return {value: this.group._group[this.index++], done: false};
+  }
+
+}
+
 
 let group = new Group();
 group.add(3);
@@ -27,3 +42,7 @@ group.add(5);
 console.log(group.has(5));
 group.delete(5);
 console.log(group.has(5));
+
+let groupIter = new GroupIterator(group);
+console.log(groupIter.next());
+console.log(groupIter.next());
