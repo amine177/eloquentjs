@@ -47,5 +47,27 @@ function buildGraph(roads) {
   return graph;
 }
 
+
+class VillageState {
+  constructor(place, parcels) {
+    this.place = place;
+    this.parcels = parcels;
+  }
+
+  move(destination) {
+    if (!roadGraph[this.place].includes(destination) {
+      return this;
+    } else {
+    let parcels = this.parcels.map(parcel => {
+      if (parcel.place != this.place) return p;
+      return {place: destination, address: p.address};
+    }).filter(parcel => {
+      p.address != p.place
+    });
+
+    return new VillageState(destination, parcels);
+    }
+  }
+}
 const roadGraph = buildGraph(roads);
 console.log(roadGraph);
