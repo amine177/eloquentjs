@@ -13,6 +13,7 @@ const roads = [
   "Shop-Town Hall"
 ];
 
+
 /* My code, it lacks on the functionnal programming side
 function buildGraph(roads) {
   let graph = Object.create(null);
@@ -29,10 +30,10 @@ function buildGraph(roads) {
 */
 
 function buildGraph(roads) {
-  let graph = Object.create(null);
+  let graph = Object.create({});
 
   function addEdge(from, to) {
-    if (graph[from] === undefined) {
+    if (graph[from] == null) {
       graph[from] = [to];
     } else {
       graph[from].push(to);
@@ -61,21 +62,57 @@ class VillageState {
     let parcels = this.parcels.map(parcel => {
       if (parcel.place != this.place) return parcel;
       return {place: destination, address: parcel.address};
-    }).filter(parcel => {
-      parcel.address != parcel.place
-    });
-
+    }).filter(parcel => parcel.address != parcel.place);
     return new VillageState(destination, parcels);
     }
   }
 }
-const roadGraph = buildGraph(roads);
-console.log(roadGraph);
 
-let initialState = new VillageState(
-  "Post Office",
-  [{place: "Post Office", address: "Alice's House"}]
-);
-let next = initialState.move("Alice's House");
-console.log(next.place);
-console.log(next.parcels);
+VillageState.random = function(parcelCount = 5) {
+  let parcels = [];
+  for (let i = 0; i < parcelCount; i++) {
+    let address = randomPick(Object.keys(roadGraph));
+    let place;
+    do {
+      place = randomPick(Object.keys(roadGraph));
+    } while (place == address);
+    parcels.push({place, address});
+  }
+  return new VillageState("Post Office", parcels);
+};
+
+function runRobot(state, robot, memory) {
+  for (let turn = 0;; turn++) {
+    if (state.parcels.length == 0) {
+      console.log(`Done in ${turn} turns`);
+      break;
+    }
+
+    // action {direction: ...., memory: ...}
+    let action = robot(state, memory);
+    state  = state.move(action.direction);
+    memory = action.memory;
+    console.log(`Moved to ${action.direction}`);
+  }
+}
+
+
+function randomPick(array) {
+  let choice = Math.floor(Math.random() * array.length);
+  return array[choice];
+}
+
+function randomRobot(state) {
+  return {direction: randomPick(roadGraph[state.place])};
+}
+const roadGraph = buildGraph(roads);
+console.log("Our graph:")
+console.log("**************"); 
+console.log(roadGraph);
+console.log("**************"); 
+
+
+console.log("running random robot");
+let randomVillage = VillageState.random();
+console.log(randomVillage);
+runRobot(randomVillage, randomRobot);
