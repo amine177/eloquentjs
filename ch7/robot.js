@@ -55,14 +55,14 @@ class VillageState {
   }
 
   move(destination) {
-    if (!roadGraph[this.place].includes(destination) {
+    if (!roadGraph[this.place].includes(destination)) {
       return this;
     } else {
     let parcels = this.parcels.map(parcel => {
-      if (parcel.place != this.place) return p;
-      return {place: destination, address: p.address};
+      if (parcel.place != this.place) return parcel;
+      return {place: destination, address: parcel.address};
     }).filter(parcel => {
-      p.address != p.place
+      parcel.address != parcel.place
     });
 
     return new VillageState(destination, parcels);
@@ -71,3 +71,11 @@ class VillageState {
 }
 const roadGraph = buildGraph(roads);
 console.log(roadGraph);
+
+let initialState = new VillageState(
+  "Post Office",
+  [{place: "Post Office", address: "Alice's House"}]
+);
+let next = initialState.move("Alice's House");
+console.log(next.place);
+console.log(next.parcels);
