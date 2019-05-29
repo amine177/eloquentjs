@@ -85,6 +85,7 @@ function runRobot(state, robot, memory) {
   for (let turn = 0;; turn++) {
     if (state.parcels.length == 0) {
       console.log(`Done in ${turn} turns`);
+      return turn;
       break;
     }
 
@@ -94,6 +95,18 @@ function runRobot(state, robot, memory) {
     memory = action.memory;
     console.log(`Moved to ${action.direction}`);
   }
+}
+
+function compareRobots(robot1, robot2, iterations=100) {
+  let e1 = 0;
+  let e2 = 0;
+  for (let i = 0; i < iterations; i++) {
+    let randomVillage = VillageState.random();
+    e1 += runRobot(randomVillage, robot1, []);
+    e2 += runRobot(randomVillage, robot2, []);
+  }
+
+  return {"e1" : e1/iterations, "e2": e2/iterations};
 }
 
 
@@ -146,3 +159,5 @@ console.log("running random robot");
 let randomVillage = VillageState.random();
 console.log(randomVillage);
 runRobot(randomVillage, goalOrientedRobot, []);
+
+console.log(compareRobots(goalOrientedRobot, randomRobot));
