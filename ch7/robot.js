@@ -147,6 +147,24 @@ function goalOrientedRobot({place, parcels}, route) {
 }
 
 
+function betterRobot({place, parcels}, route) {
+  if (route.length == 0) {
+    let parcel;
+    let filteredParcels = parcels.filter(
+      p => roadGraph[p.place].indexOf(p.address) >= 0);
+    if (filteredParcels.length > 0) {
+      parcel = filteredParcels[0];
+    }
+    else
+      parcel = parcels[0];
+    if (parcel.place != place) {
+      route = findRoute(roadGraph, place, parcel.place);
+    } else {
+      route = findRoute(roadGraph, place, parcel.address);
+    }
+  }
+  return {direction: route[0], memory: route.slice(1)};
+}
 
 const roadGraph = buildGraph(roads);
 console.log("Our graph:")
@@ -160,4 +178,4 @@ let randomVillage = VillageState.random();
 console.log(randomVillage);
 runRobot(randomVillage, goalOrientedRobot, []);
 
-console.log(compareRobots(goalOrientedRobot, randomRobot));
+console.log(compareRobots(goalOrientedRobot, betterRobot));
