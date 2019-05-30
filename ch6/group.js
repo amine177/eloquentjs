@@ -17,6 +17,10 @@ class Group {
   has(x) {
     return this._group.indexOf(x) > -1;
   }
+
+  [Symbol.iterator]() {
+    return new GroupIterator(this);
+  }
 }
 
 class GroupIterator {
@@ -43,6 +47,7 @@ console.log(group.has(5));
 group.delete(5);
 console.log(group.has(5));
 
-let groupIter = new GroupIterator(group);
-console.log(groupIter.next());
-console.log(groupIter.next());
+
+
+for (let x of group)
+  console.log(x);
