@@ -143,9 +143,25 @@ function goalOrientedRobot({place, parcels}, route) {
       route = findRoute(roadGraph, place, parcel.address);
     }
   }
-  return {direction: route[0], memory: route.slice(1)};
+  let betterRoute = route.filter(r=>roadGraph[place] == r)
+    .sort(
+      (r1, r2) => {
+        return numberOfParcels(r1, parcels) > numberOfParcels(r2, parcels) ? -1: 1;
+      });
+  if (betterRoute.length == 0)
+    betterRoute = route;
+
+    return {direction: betterRoute[0], memory: route.filter(r=>r!= betterRoute[0])};
 }
 
+function numberOfParcels(address, parcels) {
+  let n = 0;
+  for (let parcel of parcels)
+    if (parcels.address == address)
+      n += 1;
+
+  return n;
+}
 
 function betterRobot({place, parcels}, route) {
   if (route.length == 0) {
