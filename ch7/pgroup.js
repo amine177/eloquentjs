@@ -55,6 +55,7 @@ console.log("g2 has? 1");
 console.log(g2.has(1));
 console.log("g3 has? 5");
 console.log(g3.has(5));
+console.log(g4.has(1));
 console.log("iterating through g3");
 for (let x of g3) {
   console.log(x);
