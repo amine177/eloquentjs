@@ -86,7 +86,6 @@ function runRobot(state, robot, memory) {
     if (state.parcels.length == 0) {
       console.log(`Done in ${turn} turns`);
       return turn;
-      break;
     }
 
     // action {direction: ...., memory: ...}
