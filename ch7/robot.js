@@ -114,9 +114,11 @@ function randomPick(array) {
   return array[choice];
 }
 
+/*
 function randomRobot(state) {
   return {direction: randomPick(roadGraph[state.place])};
 }
+*/
 
 
 function findRoute(graph, from, to) {
