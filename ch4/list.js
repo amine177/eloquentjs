@@ -51,3 +51,4 @@ function nth(list, n) {
 console.log(nth(arrayToList([1, 2, 3]), 2));
 console.log(arrayToList_better([1, 2, 3]));
 printList(arrayToList([1, 2, 3]));
+printList(list);
