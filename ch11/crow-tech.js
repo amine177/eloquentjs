@@ -37,8 +37,8 @@
     constructor(connections, storageFor) {
       let reachable = Object.create(null)
       for (let [from, to] of connections.map(conn => conn.split("-"))) {
-        ;(reachable[from] || (reachable[from] = [])).push(to)
-        ;(reachable[to] || (reachable[to] = [])).push(from)
+        (reachable[from] || (reachable[from] = [])).push(to);
+        (reachable[to] || (reachable[to] = [])).push(from)
       }
       this.nodes = Object.create(null)
       for (let name of Object.keys(reachable))
