@@ -157,7 +157,7 @@ function goalOrientedRobot({place, parcels}, route) {
 function numberOfParcels(address, parcels) {
   let n = 0;
   for (let parcel of parcels)
-    if (parcels.address == address)
+    if (parcel.address == address)
       n += 1;
 
   return n;
