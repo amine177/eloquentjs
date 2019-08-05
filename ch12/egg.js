@@ -1,48 +1,54 @@
-function getToken(program) {
-  program = program.trim();
-  let token, expr;
-  if (token = /^"([^"]*)"/.exec(program)) {
-    expr = {type: "value", value: token[1]};
-  } else if (token =/^\d+\b/.exec(program)) {
-    expr = {type: "value", value: Number(token[0])}
-  } else if (token = /^[^\s(),"]+/.exec(program)) {
-    expr = {type: "word", name: token[0]};
+function parseExpression(program) {
+  program = skipSpace(program);
+  let match, expr;
+  if (match = /^"([^"]*)"/.exec(program)) {
+    expr = {type: "value", value: match[1]};
+  } else if (match = /^\d+\b/.exec(program)) {
+    expr = {type: "value", value: Number(match[0])};
+  } else if (match = /^[^\s(),"]+/.exec(program)) {
+    expr = {type: "word", name: match[0]};
   } else {
     throw new SyntaxError("Unexpected syntax: " + program);
   }
-
-    return  parseApply(expr, program.slice(token[0].length));
+  return parseApply(expr, program.slice(match[0].length));
 }
 
+
+function skipSpace(string) {
+  let first = string.search(/\S/);
+  if (first == -1) return "";
+  return string.slice(first);
+}
+
+
 function parseApply(expr, program) {
-  program = program.trim();
+  program = skipSpace(program);
   if (program[0] != "(") {
     return {expr: expr, rest: program};
   }
-  program = program.slice(1).trim();
-  expr = {type: "apply", operator: expr, args: []};
-  while (program[0] != ")") {
-    let arg = getToken(program);
-    expr.args.push(arg.expr);
-    program = arg.rest.trim();
+
+  program = skipSpace(program.slice(1));
+  expr = {type: "apply", opertor: expr, args: []};
+  while(program[0] != ")") {
+    let arg = parseExpression(program);
+    expr.args.push(arg);
+    program = skipSpace(arg.rest);
     if (program[0] == ",") {
-      program = program.slice(1).trim();
+      program = skipSpace(program.slice(1));
     } else if (program[0] != ")") {
-      throw  new SyntaxError("Expected ',' or ')'");
+      throw new SyntaxError("Expected ',' or ')', invalid arguments");
     }
   }
   return parseApply(expr, program.slice(1));
 }
 
+
 function parse(program) {
-  let {expr, rest} = getToken(program);
-  if (rest.trim().length > 0) {
+  let {expr, rest} = parseExpression(program);
+  if (skipSpace(rest).length > 0) {
     throw new SyntaxError("Unexpected text after program");
   }
   return expr;
-}
-
-function eval(expr, scope) {
 }
 
 console.log(parse("+(a, 10)"));
