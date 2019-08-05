@@ -1,5 +1,5 @@
 EXPRESSION: OPERATOR(ARGUMENT)
-OPERATOR: >|<|+|*|do
+OPERATOR: >|<|+|*|do|define|if|print
 ARGUMENT: WORD|VALUE|EXPRESSION
 WORD: [a-z_]*
 VALUE: [1-9]*
