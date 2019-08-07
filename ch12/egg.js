@@ -28,7 +28,7 @@ function parseApply(expr, program) {
   }
 
   program = skipSpace(program.slice(1));
-  expr = {type: "apply", opertor: expr, args: []};
+  expr = {type: "apply", operator: expr, args: []};
   while(program[0] != ")") {
     let arg = parseExpression(program);
     expr.args.push(arg);
@@ -66,6 +66,7 @@ function evaluate(expr, scope) {
         `Undefined binding: ${expr.name}`);
     }
   } else if (expr.type == "apply") {
+    console.log(expr);
     let {operator, args} = expr;
     if (operator.type == "word" &&
       operator.name in specialForms) {
@@ -105,7 +106,7 @@ specialForms.while = (args, scope ) => {
 };
 
 
-specialForm.do = (args, scope) => {
+specialForms.do = (args, scope) => {
   let value = false;
   for (let arg of args) {
     value = evaluate(arg, scope);
@@ -123,4 +124,9 @@ specialForms.define = (args, scope) => {
   scope[args[0].name] = value;
   return value;
 };
-console.log(parse("+(a, 10)"));
+
+const topScope = Object.create(null);
+topScope.true = true;
+topScope.false = false;
+let prog = parse(`if(true, false, true)`);
+console.log(evaluate(prog, topScope));
