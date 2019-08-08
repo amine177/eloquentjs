@@ -31,7 +31,7 @@ function parseApply(expr, program) {
   expr = {type: "apply", operator: expr, args: []};
   while(program[0] != ")") {
     let arg = parseExpression(program);
-    expr.args.push(arg);
+    expr.args.push(arg.expr);
     program = skipSpace(arg.rest);
     if (program[0] == ",") {
       program = skipSpace(program.slice(1));
@@ -66,7 +66,6 @@ function evaluate(expr, scope) {
         `Undefined binding: ${expr.name}`);
     }
   } else if (expr.type == "apply") {
-    console.log(expr);
     let {operator, args} = expr;
     if (operator.type == "word" &&
       operator.name in specialForms) {
@@ -130,7 +129,7 @@ specialForms.fun = (args, scope) => {
   if (!args.length) {
     throw new SyntaxError("Functions need a body");
   }
-  let body = args[args.length = 1];
+  let body = args[args.length - 1];
   let params = args.slice(0, args.length - 1).map(expr => {
     if (expr.type != "word") {
       throw new SyntaxError("Parameter names must be words");
@@ -158,7 +157,34 @@ for (let op of ["+", "-", "*", "/", "==", "<", ">"]) {
   topScope[op] = Function("a, b", `return a ${op} b;`);
 }
 
+
 topScope.true = true;
 topScope.false = false;
+
+topScope.print = value => {
+  console.log(value);
+  return value;
+};
+
+
+function run(program) {
+  return evaluate(parse(program), Object.create(topScope));
+}
+
 let prog = parse(`if(true, false, true)`);
 console.log(evaluate(prog, topScope));
+
+run(`
+do(define(total, 0),
+define(count, 1),
+while(<(count, 11),
+do(define(total, +(total, count)),
+define(count, +(count, 1)))),
+print(total))
+`);
+
+
+run(`
+do(define(plusOne, fun(a, +(a, 1))),
+print(plusOne(10)))
+`);
