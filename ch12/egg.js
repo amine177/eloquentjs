@@ -15,9 +15,11 @@ function parseExpression(program) {
 
 
 function skipSpace(string) {
+  console.log(string);
   let first = string.search(/\S/);
   if (first == -1) return "";
-  return string.slice(first);
+  string = string.slice(first);
+  return string.replace(/#.*\n/, '\n');
 }
 
 
@@ -171,20 +173,10 @@ function run(program) {
   return evaluate(parse(program), Object.create(topScope));
 }
 
-let prog = parse(`if(true, false, true)`);
-console.log(evaluate(prog, topScope));
 
-run(`
-do(define(total, 0),
-define(count, 1),
-while(<(count, 11),
-do(define(total, +(total, count)),
-define(count, +(count, 1)))),
-print(total))
-`);
 
 
 run(`
-do(define(plusOne, fun(a, +(a, 1))),
+  do(define(plusOne, fun(a, +(a, 1))),
 print(plusOne(10)))
 `);
