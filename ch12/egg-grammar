@@ -1,5 +1,21 @@
-EXPRESSION: OPERATOR(EXPRESSION) {EXPRESSION}|ARGUMENT
-OPERATOR: >|<|+|*|do|define|if|print
-ARGUMENT: WORD|VALUE|EXPRESSION
-WORD: [a-z_]*
-VALUE: [1-9]*
+- An egg program follows this structure:
+EXPRESSION: OPERATOR(ARG*)\nEXPRESSION | epsilon
+OPERATOR: +|-|/|>|%|<|==|if|print|do|define
+ARG: EXPRESSION|NUMBER|STRING|ARG,ARG | epsilon
+NUMBER: [1-9]*
+STRING: [a-z]*
+Example:
++(a, 10)
+- parseExpression() parses an expression and calls parseApply in order
+  to create an {expression} object
+- parseAplly() tries to figure the arguments for an operator or return
+  an epxression object and parse what is left recursively
+- parse() calls parseExpression() in order to start parsing the program
+- skipSpace() skips spaces
+An example of a valid parsing is:
+INPUT: +(a, 10)
+OUTPUT:
+{type: "apply",
+ operator: {type: "word", name: "+"},
+ args: [{type: "word", name: "a"},
+       {type: "value", value: 10}]}
