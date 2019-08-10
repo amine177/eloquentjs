@@ -168,6 +168,10 @@ topScope.print = value => {
   return value;
 };
 
+topScope.array =  (...values) => values;
+topScope.element = (array, n) =>  array[n];
+topScope.length = (array) =>  array.length;
+
 
 function run(program) {
   return evaluate(parse(program), Object.create(topScope));
@@ -180,3 +184,14 @@ run(`
   do(define(plusOne, fun(a, +(a, 1))),# this is a comment
 print(plusOne(10)))
 `);
+
+
+run(`
+ do(define(sum, fun(array,
+     do(define(i, 0),
+        define(sum, 0),
+        while(<(i, length(array)),
+          do(define(sum, +(sum, element(array, i))),
+             define(i, +(i, 1)))),
+        sum))),
+   print(sum(array(1, 2, 3))))`);
