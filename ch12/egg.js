@@ -177,6 +177,6 @@ function run(program) {
 
 
 run(`
-  do(define(plusOne, fun(a, +(a, 1))),
+  do(define(plusOne, fun(a, +(a, 1))),# this is a comment
 print(plusOne(10)))
 `);
